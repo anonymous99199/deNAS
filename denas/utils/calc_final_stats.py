@@ -1,3 +1,7 @@
+'''
+Script to obtain mean and standard deviation of the final test errors across runs for all algorithms
+'''
+
 import os
 import json
 import sys
@@ -49,31 +53,20 @@ parser.add_argument('--path', default='./', type=str, nargs='?',
                     help='path to encodings or jsons for each algorithm')
 parser.add_argument('--folder', default='./', type=str, nargs='?',
                     help='path to where runs reside')
-parser.add_argument('--n_runs', default=10, type=int, nargs='?',
+parser.add_argument('--n_runs', default=500, type=int, nargs='?',
                     help='number of runs to plot data for')
 parser.add_argument('--output_path', default="./", type=str, nargs='?',
                     help='specifies the path where the plot will be saved')
-parser.add_argument('--type', default="wallclock", type=str, choices=["wallclock", "fevals"],
-                    help='to plot for wallclock times or # function evaluations')
-parser.add_argument('--name', default="comparison", type=str,
-                    help='file name for the PNG plot to be saved')
-parser.add_argument('--title', default="benchmark", type=str,
-                    help='title name for the plot')
 parser.add_argument('--limit', default=1e7, type=float, help='wallclock limit')
 parser.add_argument('--regret', default='validation', type=str, choices=['validation', 'test'],
                     help='type of regret')
-parser.add_argument('--cdf_type', default='mean', type=str, choices=['mean', 'median'],
-                    help='type of cdf')
 
 args = parser.parse_args()
 path = args.path
 n_runs = args.n_runs
-plot_type = args.type
-plot_name = args.name
 regret_type = args.regret
 benchmark = args.bench
 ssp = args.ssp
-cdf_type = args.cdf_type
 output_path = args.output_path
 folder = args.folder
 
@@ -91,20 +84,12 @@ if benchmark == '101':
                ("bohb", "BOHB"),
                ("hyperband", "HB"),
                ("tpe", "TPE"),
-               # ("smac", "SMAC"),
                ("regularized_evolution", "RE"),
-               # ("de_pop10", "DE $pop=10$"),
                ("de_pop20", "DE")]
-               # ("de_pop50", "DE $pop=50$"),
-               # ("de_pop100", "DE $pop=100$")]
 elif benchmark == '201':
     methods = [("random_search", "RS"),
-               # ("bohb", "BOHB"),
-               # ("hyperband", "HB"),
                ("tpe", "TPE"),
-               # ("smac", "SMAC"),
                ("regularized_evolution", "RE"),
-               # ("de_pop10", "DE $pop=10$"),
                ("de_pop20", "DE")]
 
 else:
@@ -112,62 +97,46 @@ else:
                ("BOHB", "BOHB"),
                ("HB", "HB"),
                ("TPE", "TPE"),
-               # ("smac", "SMAC"),
                ("RE", "RE"),
-               # ("de_pop10", "DE $pop=10$"),
                ("DE_pop20", "DE")]
 
 if benchmark == '101':
-    sys.path.append(os.path.join(os.getcwd(), '../'))
-    sys.path.append(os.path.join(os.getcwd(), '../../'))
+    sys.path.append(os.path.join(os.getcwd(), '../nas_benchmarks/'))
+    sys.path.append(os.path.join(os.getcwd(), '../nas_benchmarks-development/'))
     from tabular_benchmarks import FCNetProteinStructureBenchmark, FCNetSliceLocalizationBenchmark,\
         FCNetNavalPropulsionBenchmark, FCNetParkinsonsTelemonitoringBenchmark
     from tabular_benchmarks import NASCifar10A, NASCifar10B, NASCifar10C
-    data_dir = "../tabular_benchmarks/fcnet_tabular_benchmarks/"
+    data_dir = os.path.join(os.getcwd(), "../nas_benchmarks-development/"
+                                         "tabular_benchmarks/fcnet_tabular_benchmarks/")
     if ssp == "nas_cifar10a":
-        min_budget = 4
-        max_budget = 108
         b = NASCifar10A(data_dir=data_dir, multi_fidelity=False)
         y_star_valid = b.y_star_valid
         y_star_test = b.y_star_test
         inc_config = None
     elif ssp == "nas_cifar10b":
-        min_budget = 4
-        max_budget = 108
         b = NASCifar10B(data_dir=data_dir, multi_fidelity=False)
         y_star_valid = b.y_star_valid
         y_star_test = b.y_star_test
         inc_config = None
     elif ssp == "nas_cifar10c":
-        min_budget = 4
-        max_budget = 108
         b = NASCifar10C(data_dir=data_dir, multi_fidelity=False)
         y_star_valid = b.y_star_valid
         y_star_test = b.y_star_test
         inc_config = None
     elif ssp == "protein_structure":
-        min_budget = 4
-        max_budget = 100
         b = FCNetProteinStructureBenchmark(data_dir=data_dir)
         inc_config, y_star_valid, y_star_test = b.get_best_configuration()
     elif ssp == "slice_localization":
-        min_budget = 4
-        max_budget = 100
         b = FCNetSliceLocalizationBenchmark(data_dir=data_dir)
         inc_config, y_star_valid, y_star_test = b.get_best_configuration()
     elif ssp == "naval_propulsion":
-        min_budget = 4
-        max_budget = 100
         b = FCNetNavalPropulsionBenchmark(data_dir=data_dir)
         inc_config, y_star_valid, y_star_test = b.get_best_configuration()
     elif ssp == "parkinsons_telemonitoring":
-        min_budget = 4
-        max_budget = 100
         b = FCNetParkinsonsTelemonitoringBenchmark(data_dir=data_dir)
         inc_config, y_star_valid, y_star_test = b.get_best_configuration()
+
 elif benchmark == '1shot1':    
-    sys.path.append(os.path.join(os.getcwd(), '../'))
-    sys.path.append(os.path.join(os.getcwd(), '../../'))
     sys.path.append(os.path.join(os.getcwd(), '../nasbench/'))
     sys.path.append(os.path.join(os.getcwd(), '../nasbench-1shot1/'))
     from nasbench_analysis.search_spaces.search_space_1 import SearchSpace1
@@ -176,17 +145,13 @@ elif benchmark == '1shot1':
     search_space = eval('SearchSpace{}()'.format(ssp))
     y_star_valid, y_star_test, inc_config = (search_space.valid_min_error,
                                              search_space.test_min_error, None)
+
 else:
-    sys.path.append(os.path.join(os.getcwd(), '../'))
-    sys.path.append(os.path.join(os.getcwd(), '../../'))
-    sys.path.append(os.path.join(os.getcwd(), '../nasbench/'))
-    sys.path.append(os.path.join(os.getcwd(), '../nasbench-1shot1/'))
     sys.path.append(os.path.join(os.getcwd(), '../nas201/'))
-    sys.path.append(os.path.join(os.getcwd(), '../AutoDL-Projects/'))
     sys.path.append(os.path.join(os.getcwd(), '../AutoDL-Projects/lib/'))
     from nas_201_api import NASBench201API as API
     from models import CellStructure, get_search_spaces
-    data_dir = "../nas201/NAS-Bench-201-v1_0-e61699.pth"
+    data_dir = os.path.join(os.getcwd(), "../nas201/NAS-Bench-201-v1_0-e61699.pth")
     api = API(data_dir)
     def find_nas201_best(api, dataset):
         arch, y_star_test = api.find_best(dataset=dataset, metric_on_set='ori-test')

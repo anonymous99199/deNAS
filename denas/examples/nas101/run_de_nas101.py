@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.append(os.path.join(os.getcwd(), '../nas_benchmarks/'))
-sys.path.append(os.path.join(os.getcwd(), '../nas_benchmarks_development/'))
+sys.path.append(os.path.join(os.getcwd(), '../nas_benchmarks-development/'))
 
 import json
 import pickle
