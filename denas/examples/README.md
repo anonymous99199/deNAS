@@ -2,9 +2,9 @@
 
 Requirements for running experiments:
 * __nas\_benchmarks__ can be found [here](https://github.com/automl/nas_benchmarks/blob/development/README.md)
-along with the instructions to download the files.
-    * This repo contains both NAS-Bench-101 and NAS-HPO-Bench.
-* __nas-bench-1shot1__ can be found [here](https://github.com/automl/nasbench-1shot1).
+along with the instructions to download the files
+    * This repo contains both NAS-Bench-101 and NAS-HPO-Bench
+* __nas-bench-1shot1__ can be found [here](https://github.com/automl/nasbench-1shot1)
 * __AutoDL-Projects__ can be found [here](https://github.com/D-X-Y/AutoDL-Projects)
     * This repo contains NAS-201 and the benchmark files can be found 
     [here](https://github.com/D-X-Y/NAS-Bench-201#preparation-and-download)

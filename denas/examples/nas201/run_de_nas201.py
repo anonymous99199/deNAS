@@ -26,6 +26,7 @@ def get_configuration_space(max_nodes, search_space):
       cs.add_hyperparameter(ConfigSpace.CategoricalHyperparameter(node_str, search_space))
   return cs
 
+
 # From https://github.com/D-X-Y/AutoDL-Projects/blob/master/exps/algos/BOHB.py
 ## Author: https://github.com/D-X-Y [Xuanyi.Dong@student.uts.edu.au]
 def config2structure_func(max_nodes):
@@ -40,6 +41,7 @@ def config2structure_func(max_nodes):
       genotypes.append( tuple(xlist) )
     return CellStructure( genotypes )
   return config2structure
+
 
 def calculate_regrets(history, runtime):
     assert len(runtime) == len(history)
@@ -68,10 +70,12 @@ def calculate_regrets(history, runtime):
     res['runtime'] = np.cumsum(runtime).tolist()
     return res
 
+
 def save_configspace(cs, path, filename='configspace'):
     fh = open(os.path.join(output_path, '{}.pkl'.format(filename)), 'wb')
     pickle.dump(cs, fh)
     fh.close()
+
 
 def find_nas201_best(api, dataset):
     arch, y_star_test = api.find_best(dataset=dataset, metric_on_set='ori-test')
@@ -94,12 +98,12 @@ parser.add_argument('--max_nodes', default=4, type=int, nargs='?',
                     help='maximum number of nodes in the cell')
 parser.add_argument('--gens', default=100, type=int, nargs='?',
                     help='(iterations) number of generations for DE to evolve')
-parser.add_argument('--output_path', default="./", type=str, nargs='?',
+parser.add_argument('--output_path', default="./results", type=str, nargs='?',
                     help='specifies the path where the results will be saved')
 parser.add_argument('--data_dir', type=str, nargs='?',
                     default="../nas201/NAS-Bench-201-v1_0-e61699.pth",
                     help='specifies the path to the benchmark data')
-parser.add_argument('--pop_size', default=10, type=int, nargs='?', help='population size')
+parser.add_argument('--pop_size', default=20, type=int, nargs='?', help='population size')
 strategy_choices = ['rand1_bin', 'rand2_bin', 'rand2dir_bin', 'best1_bin', 'best2_bin',
                     'currenttobest1_bin', 'randtobest1_bin',
                     'rand1_exp', 'rand2_exp', 'rand2dir_exp', 'best1_exp', 'best2_exp',
@@ -132,7 +136,7 @@ os.makedirs(output_path, exist_ok=True)
 api = API(args.data_dir)
 search_space = get_search_spaces('cell', 'nas-bench-201')
 
-# Getting configuration space
+# Parameter space to be used by DE
 cs = get_configuration_space(args.max_nodes, search_space)
 dimensions = len(cs.get_hyperparameters())
 config2structure = config2structure_func(args.max_nodes)
@@ -140,7 +144,7 @@ config2structure = config2structure_func(args.max_nodes)
 y_star_valid, y_star_test = find_nas201_best(api, dataset)
 inc_config = cs.get_default_configuration().get_array().tolist()
 
-# Custom objective function to interface Nasbench-201
+# Custom objective function for DE to interface NASBench-201
 def f(config, budget=max_budget):
     global dataset, api
     structure = config2structure(config)
@@ -174,10 +178,10 @@ def f(config, budget=max_budget):
 # Initializing DE object
 de = DE(cs=cs, dimensions=dimensions, f=f, pop_size=args.pop_size,
         mutation_factor=args.mutation_factor, crossover_prob=args.crossover_prob,
-        strategy=args.strategy, max_budget=args.max_budget)
+        strategy=args.strategy, budget=args.max_budget)
 
 
-if args.runs is None:
+if args.runs is None:  # for a single run
     if not args.fix_seed:
         np.random.seed(0)
     # Running DE iterations
@@ -186,7 +190,7 @@ if args.runs is None:
     fh = open(os.path.join(output_path, 'run_{}.json'.format(args.run_id)), 'w')
     json.dump(res, fh)
     fh.close()
-else:
+else:  # for multiple runs
     for run_id, _ in enumerate(range(args.runs), start=args.run_start):
         if not args.fix_seed:
             np.random.seed(run_id)
@@ -199,6 +203,7 @@ else:
         json.dump(res, fh)
         fh.close()
         print("Run saved. Resetting...")
+        # essential step to not accumulate consecutive runs
         de.reset()
 
 save_configspace(cs, output_path)
