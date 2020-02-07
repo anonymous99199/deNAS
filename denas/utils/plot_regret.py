@@ -107,58 +107,58 @@ if benchmark == '1shot1' and ssp is None:
 
 if benchmark == '101':
     methods = [
-               # ("random_search", "RS"),
-               # ("bohb", "BOHB"),
-               # ("hyperband", "HB"),
-               # ("tpe", "TPE"),
-               # ("smac", "SMAC"),
-               # ("regularized_evolution", "RE"),
-               ("de_pop10", "DE $pop=10$"),
-               ("de_pop20", "DE $pop=20$"),
-               ("de_pop30", "DE $pop=30$"),
-               ("de_pop40", "DE $pop=40$"),
-               ("de_pop50", "DE $pop=50$"),
-               ("de_pop60", "DE $pop=60$"),
-               ("de_pop70", "DE $pop=70$"),
-               ("de_pop80", "DE $pop=80$"),
-               ("de_pop90", "DE $pop=90$"),
-               ("de_pop100", "DE $pop=100$")]
+               ("random_search", "RS"),
+               ("bohb", "BOHB"),
+               ("hyperband", "HB"),
+               ("tpe", "TPE"),
+               ("regularized_evolution", "RE"),
+               ("de_pop20", "DE")]
+               # ("de_pop10", "DE $pop=10$"),
+               # ("de_pop20", "DE $pop=20$")]
+               # ("de_pop30", "DE $pop=30$"),
+               # ("de_pop40", "DE $pop=40$"),
+               # ("de_pop50", "DE $pop=50$"),
+               # ("de_pop60", "DE $pop=60$"),
+               # ("de_pop70", "DE $pop=70$"),
+               # ("de_pop80", "DE $pop=80$"),
+               # ("de_pop90", "DE $pop=90$"),
+               # ("de_pop100", "DE $pop=100$")]
 elif benchmark == '201':
     methods = [
-               # ("random_search", "RS"),
-               # ("bohb", "BOHB"),
-               # ("hyperband", "HB"),
-               # ("tpe", "TPE"),
-               # ("smac", "SMAC"),
-               # ("regularized_evolution", "RE"),
-               ("de_pop10", "DE $pop=10$"),
-               ("de_pop20", "DE $pop=20$"),
-               ("de_pop30", "DE $pop=30$"),
-               ("de_pop40", "DE $pop=40$"),
-               ("de_pop50", "DE $pop=50$"),
-               ("de_pop60", "DE $pop=60$"),
-               ("de_pop70", "DE $pop=70$"),
-               ("de_pop80", "DE $pop=80$"),
-               ("de_pop90", "DE $pop=90$"),
-               ("de_pop100", "DE $pop=100$")]
+               ("random_search", "RS"),
+               ("bohb", "BOHB"),
+               ("hyperband", "HB"),
+               ("tpe", "TPE"),
+               ("regularized_evolution", "RE"),
+               ("de_pop20", "DE")]
+               # ("de_pop10", "DE $pop=10$"),
+               # ("de_pop20", "DE $pop=20$"),
+               # ("de_pop30", "DE $pop=30$"),
+               # ("de_pop40", "DE $pop=40$"),
+               # ("de_pop50", "DE $pop=50$"),
+               # ("de_pop60", "DE $pop=60$"),
+               # ("de_pop70", "DE $pop=70$"),
+               # ("de_pop80", "DE $pop=80$"),
+               # ("de_pop90", "DE $pop=90$"),
+               # ("de_pop100", "DE $pop=100$")]
 else:
     methods = [
-               # ("random_search", "RS"),
-               # ("bohb", "BOHB"),
-               # ("hyperband", "HB"),
-               # ("tpe", "TPE"),
-               # ("smac", "SMAC"),
-               # ("regularized_evolution", "RE"),
-               ("DE_pop10", "DE $pop=10$"),
-               ("DE_pop20", "DE $pop=20$"),
-               ("DE_pop30", "DE $pop=30$"),
-               ("DE_pop40", "DE $pop=40$"),
-               ("DE_pop50", "DE $pop=50$"),
-               ("DE_pop60", "DE $pop=60$"),
-               ("DE_pop70", "DE $pop=70$"),
-               ("DE_pop80", "DE $pop=80$"),
-               ("DE_pop90", "DE $pop=90$"),
-               ("DE_pop100", "DE $pop=100$")]
+               ("RS", "RS"),
+               ("BOHB", "BOHB"),
+               ("HB", "HB"),
+               ("TPE", "TPE"),
+               ("RE", "RE"),
+               ("DE_pop20", "DE")]
+               # ("DE_pop10", "DE $pop=10$"),
+               # ("DE_pop20", "DE $pop=20$"),
+               # ("DE_pop30", "DE $pop=30$"),
+               # ("DE_pop40", "DE $pop=40$"),
+               # ("DE_pop50", "DE $pop=50$"),
+               # ("DE_pop60", "DE $pop=60$"),
+               # ("DE_pop70", "DE $pop=70$"),
+               # ("DE_pop80", "DE $pop=80$"),
+               # ("DE_pop90", "DE $pop=90$"),
+               # ("DE_pop100", "DE $pop=100$")]
 
 
 # plot limits
@@ -229,10 +229,7 @@ plt.tick_params(which='both', direction="in")
 plt.legend(loc='lower left', framealpha=1, prop={'size': 25, 'weight': 'bold'})
 plt.title(args.title)
 if plot_type == "wallclock":
-    if benchmark == '201':
-        plt.xlabel("estimated wallclock time $[s]$", fontsize=50)
-    else:
-        plt.xlabel("estimated wallclock time $[s]$", fontsize=50)
+    plt.xlabel("estimated wallclock time $[s]$", fontsize=50)
 elif plot_type == "fevals":
     plt.xlabel("number of function evaluations", fontsize=50)
 plt.ylabel("{} regret".format(regret_type), fontsize=50)

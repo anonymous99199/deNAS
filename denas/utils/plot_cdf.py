@@ -109,12 +109,10 @@ if benchmark == '1shot1' and ssp is None:
     sys.exit()
 
 if benchmark == '101':
-    # methods = [("random_search", "RS"),
     methods = [
                # ("bohb", "BOHB"),
                # ("hyperband", "HB"),
                # ("tpe", "TPE"),
-               # ("smac", "SMAC"),
                ("regularized_evolution", "RE"),
                # ("de_pop10", "DE $pop=10$"),
                ("de_pop20", "DE")]
@@ -127,12 +125,10 @@ elif benchmark == '201':
                ("de_pop20", "DE")]
 
 else:
-    # methods = [("random_search", "RS"),
     methods = [
                # ("BOHB", "BOHB"),
                # ("HB", "HB"),
                # ("TPE", "TPE"),
-               # ("SMAC", "SMAC"),
                ("RE", "RE"),
                # ("DE_pop10", "DE $pop=10$"),
                ("DE_pop20", "DE")]
