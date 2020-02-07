@@ -1,7 +1,5 @@
 import os
 import sys
-sys.path.append(os.path.join(os.getcwd(), '../'))
-sys.path.append(os.path.join(os.getcwd(), '../../'))
 sys.path.append(os.path.join(os.getcwd(), '../nasbench/'))
 sys.path.append(os.path.join(os.getcwd(), '../nasbench-1shot1/'))
 
@@ -17,14 +15,14 @@ from nasbench_analysis.search_spaces.search_space_2 import SearchSpace2
 from nasbench_analysis.search_spaces.search_space_3 import SearchSpace3
 from nasbench_analysis.utils import INPUT, OUTPUT, CONV1X1, CONV3X3, MAXPOOL3X3
 
-from de_nas.optimizers import DE
+from denas import DE
 
 
 def remove_invalid_configs(traj, runtime, history):
     idx = np.where(np.array(runtime)==0)
     runtime = np.delete(runtime, idx)
     traj = np.delete(np.array(traj), idx)
-    history = np.delete(history, idx)
+    history = np.delete(history, idx)https://github.com/D-X-Y/NAS-Bench-201#preparation-and-download
     return traj, runtime, history
 
 def save(trajectory, runtime, history, output_path, run_id, filename="run"):

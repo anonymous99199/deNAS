@@ -6,7 +6,9 @@ along with the instructions to download the files.
     * This repo contains both NAS-Bench-101 and NAS-HPO-Bench.
 * __nas-bench-1shot1__ can be found [here](https://github.com/automl/nasbench-1shot1).
 * __AutoDL-Projects__ can be found [here](https://github.com/D-X-Y/AutoDL-Projects)
-    * This repo contains NAS-201.
+    * This repo contains NAS-201 and the benchmark files can be found 
+    [here](https://github.com/D-X-Y/NAS-Bench-201#preparation-and-download)
+* __nasbench__ can be found [here](https://github.com/google-research/nasbench)
 <br/>
 <br/>
 
@@ -33,11 +35,23 @@ Directory structure for the execution of these scripts:
 |
 └───nasbench-1shot1/
 │   └───nasbench_analysis/
+│   |   └───nasbench_data/   
+|   |   │   └───108_e/
+│   |   |       └───nasbench_full.tfrecord
+│   |   |       └───nasbench_only108.tfrecord
 |   └───optimizers/
+|   └───...
+|
+└───nasbench/
+│   └───lib/
+|   └───api.py/
 |   └───...
 |
 └───AutoDL-Projects/
 │   └───exps/
 |   └───libs/
 |   └───...
+|
+└───nas201/
+│   └───NAS-Bench-201-v1_0-e61699.pth
 ```

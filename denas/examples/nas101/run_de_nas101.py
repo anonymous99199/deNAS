@@ -1,8 +1,7 @@
 import os
 import sys
-sys.path.append(os.path.join(os.getcwd(), '../'))
-sys.path.append(os.path.join(os.getcwd(), '../../'))
-sys.path.append(os.path.join(os.getcwd(), '../../../'))
+sys.path.append(os.path.join(os.getcwd(), '../nas_benchmarks/'))
+sys.path.append(os.path.join(os.getcwd(), '../nas_benchmarks_development/'))
 
 import json
 import pickle
@@ -13,7 +12,7 @@ from tabular_benchmarks import FCNetProteinStructureBenchmark, FCNetSliceLocaliz
     FCNetNavalPropulsionBenchmark, FCNetParkinsonsTelemonitoringBenchmark
 from tabular_benchmarks import NASCifar10A, NASCifar10B, NASCifar10C
 
-from de_nas.optimizers import DE
+from denas import DE
 
 
 def remove_invalid_configs(traj, runtime, history):

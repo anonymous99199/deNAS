@@ -4,9 +4,9 @@ de_nas/examples/results/
 de_nas/examples/plots/
 de_nas/examples/backup
 
-de_nas/optimizers/__pycache__/
 */__pycache__/
-*/*/__pycache/
+*/*/__pycache__/
+*/*/*/__pycache__/
 
 de_nas/examples/slurm*.out
 */slurm*.out
@@ -15,4 +15,4 @@ de_nas/examples/slurm*.out
 slurm*.out
 *.png
 *.sh
-
+.idea/

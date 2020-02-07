@@ -1,11 +1,6 @@
 import os
 import sys
-sys.path.append(os.path.join(os.getcwd(), '../'))
-sys.path.append(os.path.join(os.getcwd(), '../../'))
-sys.path.append(os.path.join(os.getcwd(), '../nasbench/'))
-sys.path.append(os.path.join(os.getcwd(), '../nasbench-1shot1/'))
 sys.path.append(os.path.join(os.getcwd(), '../nas201/'))
-sys.path.append(os.path.join(os.getcwd(), '../AutoDL-Projects/'))
 sys.path.append(os.path.join(os.getcwd(), '../AutoDL-Projects/lib/'))
 
 import json
@@ -17,7 +12,7 @@ import ConfigSpace
 from nas_201_api import NASBench201API as API
 from models import CellStructure, get_search_spaces
 
-from de_nas.optimizers import DE
+from denas import DE
 
 
 # From https://github.com/D-X-Y/AutoDL-Projects/blob/master/exps/algos/BOHB.py
