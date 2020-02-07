@@ -1,7 +1,7 @@
 #################
 # Random Search #
 #################
-# This script is a modified from a script authored by Xuanyi Dong
+# This script is modified from a script authored by Xuanyi Dong
 # https://github.com/D-X-Y/AutoDL-Projects/blob/master/exps/algos/R_EA.py
 
 import os
