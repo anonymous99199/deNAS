@@ -1,3 +1,4 @@
+'''Differential Evolution class definition'''
 
 import numpy as np
 import ConfigSpace
@@ -34,6 +35,8 @@ class DEBase():
         self.history = []
 
     def reset(self):
+        '''Can be called to reuse the same object for a new DE run
+        '''
         self.inc_score = np.inf
         self.inc_config = None
         self.population = None
@@ -59,7 +62,7 @@ class DEBase():
         vector : array
             The vector describing the individual from the population
         fix_type : str, {'random', 'clip'}
-            if 'random', the values are replaced with a random sampling from (0,1)
+            if 'random', the values are replaced with a random sampling from [0,1)
             if 'clip', the values are clipped to the closest limit from {0, 1}
 
         Returns
@@ -78,7 +81,8 @@ class DEBase():
     def vector_to_configspace(self, vector):
         '''Converts numpy array to ConfigSpace object
 
-        Works when self.cs is a ConfigSpace object and the input vector is in the domain [0, 1].
+        Works when self.cs is a ConfigSpace object and each component of the
+        input vector is in the domain [0, 1].
         '''
         new_config = self.cs.sample_configuration()
         for i, hyper in enumerate(self.cs.get_hyperparameters()):
@@ -105,7 +109,7 @@ class DEBase():
     def crossover(self):
         raise NotImplementedError("The function needs to be defined in the sub class.")
 
-    def evolve(self):
+    def evolve_generation(self):
         raise NotImplementedError("The function needs to be defined in the sub class.")
 
     def run(self):
@@ -113,6 +117,34 @@ class DEBase():
 
 
 class DE(DEBase):
+    '''DE object
+
+    Creates and initialises DE with the specified hyperparameters.
+    Contains functions to run DE and perform DE operations.
+
+    Parameters
+    ----------
+    cs : ConfigSpace
+        ConfigSpace object defining the parameter space
+    f : function
+        The objective function that takes a configuration and (optional) budget as input
+    dimensions : int
+        The dimensionality of the parameter space
+    pop_size : int
+        Population size of DE for each generation
+    max_age : float, optional
+        Number of generations after which an individual will be replaced with random individual
+    mutation_factor : float
+        Scaling factor for mutation (F)
+    crossover_prob : float
+        Probability for crossover (Cr)
+    strategy : str
+        Strategies for mutation and crossover concatenated using '_'
+        Default of 'rand1_bin' implies
+            mutation strategy is 'rand1' and crossover strategy is 'bin' (binomial)
+    budget : int, optional
+        Can be used to define the budget to be used for evaluation of f()
+    '''
     def __init__(self, cs=None, f=None, dimensions=None, pop_size=None, max_age=np.inf,
                  mutation_factor=None, crossover_prob=None, strategy='rand1_bin',
                  budget=None, **kwargs):
@@ -126,6 +158,8 @@ class DE(DEBase):
             self.mutation_strategy = self.crossover_strategy = None
 
     def f_objective(self, x, budget=None):
+        '''Objective function that will evaluate x on budget
+        '''
         if self.f is None:
             raise NotImplementedError("An objective function needs to be passed.")
         config = self.vector_to_configspace(x)
@@ -136,7 +170,7 @@ class DE(DEBase):
         return fitness, cost
 
     def init_eval_pop(self, budget=None):
-        '''Creates new population of 'pop_size' and evaluates individuals.
+        '''Creates new population of 'pop_size' and evaluates individuals
         '''
         self.population = self.init_population(self.pop_size)
         self.fitness = np.array([np.inf for i in range(self.pop_size)])
@@ -173,6 +207,8 @@ class DE(DEBase):
         return mutant
 
     def mutation_currenttobest1(self, current, best, r1, r2):
+        '''Performs the 'current-to-best' type of DE mutation
+        '''
         diff1 = best - current
         diff2 = r1 - r2
         mutant = current + self.mutation_factor * diff1 + self.mutation_factor * diff2
@@ -184,7 +220,7 @@ class DE(DEBase):
         return mutant
 
     def mutation(self, current=None, best=None):
-        '''Performs DE mutation
+        '''Performs DE mutation based on the strategy
         '''
         if self.mutation_strategy == 'rand1':
             r1, r2, r3 = self.sample_population(size=3)
@@ -245,11 +281,11 @@ class DE(DEBase):
         return target
 
     def crossover(self, target, mutant):
-        '''Performs DE crossover
+        '''Performs DE crossover based on the strategy
         '''
         if self.crossover_strategy == 'bin':
             offspring = self.crossover_bin(target, mutant)
-        elif self.crossover_strategy == 'exp':
+        else:
             offspring = self.crossover_exp(target, mutant)
         return offspring
 
@@ -353,9 +389,36 @@ class DE(DEBase):
         return traj, runtime, history
 
     def run(self, generations=1, verbose=False, budget=None):
+        '''Main function that performs DE optimisation for the specified 'generations'
+
+        Parameters
+        ----------
+        generations : int
+            Number of generations to evolve, or iterations
+        verbose : bool
+            To print output during optimisation
+        budget : int, optional
+            Pass budget to override DE budget initialised with
+            Allows reuse of the same DE object by calling reset()
+
+        Returns
+        -------
+        traj : list
+            List of fitness value of evaluated configurations
+        runtime : list
+            List of cost of evaluated configurations
+        history : list (of tuples)
+            Each tuple contains 3 further elements
+                The vector/array form of the configuration (x)
+                The fitness value at that iteration
+                The budget at which the fitness was evaluated
+        '''
         self.traj = []
         self.runtime = []
         self.history = []
+
+        if budget is None:
+            budget = self.budget
 
         if verbose:
             print("Initializing and evaluating new population...")
@@ -374,4 +437,4 @@ class DE(DEBase):
         if verbose:
             print("\nRun complete!")
 
-        return (np.array(self.traj), np.array(self.runtime), np.array(self.history))
+        return np.array(self.traj), np.array(self.runtime), np.array(self.history)
