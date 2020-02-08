@@ -46,7 +46,8 @@ parser.add_argument('--gens', default=100, type=int, nargs='?',
                     help='(iterations) number of generations for DE to evolve')
 parser.add_argument('--output_path', default="./results", type=str, nargs='?',
                     help='specifies the path where the results will be saved')
-parser.add_argument('--data_dir', default="../tabular_benchmarks/fcnet_tabular_benchmarks/",
+parser.add_argument('--data_dir', default="../nas_benchmarks-development/"
+                                          "tabular_benchmarks/fcnet_tabular_benchmarks/",
                     type=str, nargs='?', help='specifies the path to the tabular data')
 parser.add_argument('--pop_size', default=20, type=int, nargs='?', help='population size')
 strategy_choices = ['rand1_bin', 'rand2_bin', 'rand2dir_bin', 'best1_bin', 'best2_bin',
