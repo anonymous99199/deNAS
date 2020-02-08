@@ -1,3 +1,6 @@
+'''Runs DE on NAS-Bench-101 and NAS-HPO-Bench
+'''
+
 import os
 import sys
 sys.path.append(os.path.join(os.getcwd(), '../nas_benchmarks/'))

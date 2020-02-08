@@ -26,6 +26,6 @@ Plots can be generated in a similar way, by passing the directory of the stored 
 
 `PYTHONPATH=$PWD python3 denas/utils/plot_cdf.py --path denas/examples/results/nas101/cifara`
 
-For the above plotting script to work with the output of NAS-Bench-1shot1, the output files need to additionally preprocessed, for example:
+For the above plotting script to work with the output of NAS-Bench-1shot1, the output files need to be additionally preprocessed, for example:
 
 `PYTHONPATH=$PWD python3 denas/utils/convert_files.py --path denas/examples/results/nas1shot1/ --ssp 1`

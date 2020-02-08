@@ -1,3 +1,6 @@
+'''Script to plot regret curves for multiple runs on the benchmarks
+'''
+
 import os
 import json
 import sys
