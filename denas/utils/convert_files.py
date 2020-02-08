@@ -1,5 +1,4 @@
-'''
-Script to convert .obj files dumped by NAS-1shot1 scripts to .json for plotting
+'''Script to convert .obj files dumped by NAS-1shot1 scripts to .json for plotting
 '''
 
 import os

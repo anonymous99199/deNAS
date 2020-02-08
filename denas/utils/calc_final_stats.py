@@ -1,6 +1,5 @@
-'''
-Script to obtain mean and standard deviation of the final test errors across runs for all algorithms
-'''
+'''Script to obtain mean and standard deviation of the final test
+    errors across runs for all algorithms'''
 
 import os
 import json

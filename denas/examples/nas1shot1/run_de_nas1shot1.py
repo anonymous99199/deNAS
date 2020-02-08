@@ -1,3 +1,6 @@
+'''Runs DE on NAS-Bench-1shot1
+'''
+
 import os
 import sys
 sys.path.append(os.path.join(os.getcwd(), '../nasbench/'))

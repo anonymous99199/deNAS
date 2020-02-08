@@ -1,4 +1,5 @@
-'''Script to generate MDS plots for a DE trajectory on the chosen benchmark'''
+'''Script to generate MDS plots for a DE trajectory on the chosen benchmark
+'''
 
 import os
 import sys

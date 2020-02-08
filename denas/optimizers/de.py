@@ -1,4 +1,5 @@
-'''Differential Evolution class definition'''
+'''Differential Evolution class definition
+'''
 
 import numpy as np
 import ConfigSpace

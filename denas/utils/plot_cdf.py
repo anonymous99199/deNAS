@@ -1,3 +1,6 @@
+'''Script to plot empirical CDF of final test regret
+    for multiple runs on the benchmarks'''
+
 import os
 import json
 import sys
@@ -91,8 +94,6 @@ parser.add_argument('--title', default="benchmark", type=str,
 parser.add_argument('--limit', default=1e7, type=float, help='wallclock limit')
 parser.add_argument('--regret', default='validation', type=str, choices=['validation', 'test'],
                     help='type of regret')
-parser.add_argument('--cdf_type', default='mean', type=str, choices=['mean', 'median'],
-                    help='type of cdf')
 
 args = parser.parse_args()
 path = args.path
@@ -102,7 +103,6 @@ plot_name = args.name
 regret_type = args.regret
 benchmark = args.bench
 ssp = args.ssp
-cdf_type = args.cdf_type
 
 if benchmark == '1shot1' and ssp is None:
     print("Specify \'--ssp\' from {1, 2, 3} for choosing the search space for NASBench-1shot1.")
@@ -183,8 +183,6 @@ for index, (m, label) in enumerate(methods):
         print("{}. Plotting for {}".format(index, m))
         print(len(regret), len(runtimes))
 
-        ## mean anytime regret
-        # te = np.mean(te, axis=1)[idx] if cdf_type == 'mean' else np.median(te, axis=1)[idx]
         ## final regret
         te = te[idx][-1]
 
@@ -203,7 +201,6 @@ plt.legend(loc='lower right', framealpha=1, prop={'size': 35, 'weight': 'bold'})
 plt.title(args.title)
 plt.ylabel("probability", fontsize=50)
 plt.xlabel("final {} regret".format(regret_type), fontsize=50)
-# plt.xlim(min_regret/10, max_regret*10)
 plt.grid(which='both', alpha=0.5, linewidth=0.5)
 print(os.path.join(args.output_path, '{}.png'.format(plot_name)))
 plt.savefig(os.path.join(args.output_path, '{}.png'.format(plot_name)),
