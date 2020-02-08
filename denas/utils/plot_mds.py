@@ -134,25 +134,25 @@ if benchmark == '101':
 
     if benchmark_type == "nas_cifar10a": # NAS-Bench-101
         max_budget = 108
-        b = NASCifar10A(data_dir=args.data_dir, multi_fidelity=True)
+        b = NASCifar10A(data_dir=data_dir, multi_fidelity=True)
     elif benchmark_type == "nas_cifar10b": # NAS-Bench-101
         max_budget = 108
-        b = NASCifar10B(data_dir=args.data_dir, multi_fidelity=True)
+        b = NASCifar10B(data_dir=data_dir, multi_fidelity=True)
     elif benchmark_type == "nas_cifar10c": # NAS-Bench-101
         max_budget = 108
-        b = NASCifar10C(data_dir=args.data_dir, multi_fidelity=True)
+        b = NASCifar10C(data_dir=data_dir, multi_fidelity=True)
     elif benchmark_type == "protein_structure": # NAS-HPO-Bench
         max_budget = 100
-        b = FCNetProteinStructureBenchmark(data_dir=args.data_dir)
+        b = FCNetProteinStructureBenchmark(data_dir=data_dir)
     elif benchmark_type == "slice_localization": # NAS-HPO-Bench
         max_budget = 100
-        b = FCNetSliceLocalizationBenchmark(data_dir=args.data_dir)
+        b = FCNetSliceLocalizationBenchmark(data_dir=data_dir)
     elif benchmark_type == "naval_propulsion": # NAS-HPO-Bench
         max_budget = 100
-        b = FCNetNavalPropulsionBenchmark(data_dir=args.data_dir)
+        b = FCNetNavalPropulsionBenchmark(data_dir=data_dir)
     else:  # benchmark_type == "parkinsons_telemonitoring": # NAS-HPO-Bench
         max_budget = 100
-        b = FCNetParkinsonsTelemonitoringBenchmark(data_dir=args.data_dir)
+        b = FCNetParkinsonsTelemonitoringBenchmark(data_dir=data_dir)
 
     def f(config, budget=None):
         if budget is not None:
@@ -266,4 +266,4 @@ ax2.set_title('{} parameter space'.format(title))
 ax1.set(xlabel="$MDS-X$", ylabel="$MDS-Y$")
 ax2.set(xlabel="$MDS-X$", ylabel="$MDS-Y$")
 plt.tight_layout()
-plt.savefig('{}_mds.png'.format(name), dpi=300)
+plt.savefig(os.path.join(output_path, '{}_mds.png'.format(name)), dpi=300)
